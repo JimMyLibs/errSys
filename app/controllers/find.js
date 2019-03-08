@@ -2,17 +2,18 @@ import mongoose from 'mongoose'
 import ErrInfoSchema from '../models/errInfo'
 import { today } from '../utils/date'
 
-export default (req, res, next) => {
+export default async (req, res, next) => {
     const { headers, method, path, query, body, body: {
         data, data: {
-            phone, userId, errMsg
+            phone, userId, date
         }
     } } = req;
-    const todayModel = mongoose.model('info_'+today, ErrInfoSchema);// 创建当日模型
+    const findDay = date || today
+    const todayModel = mongoose.model('info_' + findDay, ErrInfoSchema);// 创建当日模型
     try {
-        todayModel.create(data, (err, docs) => {
-            if(err) throw err;
-            console.log('保存成功',phone);
+        await todayModel.find(data, { _id: 0, __v: 0 }, (err, docs) => {
+            if (err) throw err;
+            console.log('查询成功', phone);
             return res.send({
                 respCode: '10000',
                 message: 'success',
