@@ -1,6 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import mongo from '../db/errInfo'
+import mongo from '../db/mongo'
 import rules from './controllers'
 
 const app = express()
@@ -27,4 +27,4 @@ app.all('*', (req, res, next) => {
 
 rules(app)
 
-app.listen(3101, () => console.log(`Example app listening on port 3001`))
+app.listen(3101, () => console.log(`Example app listening on port 3101`))

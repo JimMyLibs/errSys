@@ -7,13 +7,11 @@ const errInfoSchema = new mongoose.Schema({
 	errMsg: {type: String,default:''},// 错误信息
 	meta: {
 		createAt: {type: Date,default: Date.now()},
-		updateAt: {type: Date,default: Date.now()},
+		updateAt: {type: Date,default: Date.now()}
 	}
 })
 // 每次保存数据之前都会调用这个方法
 errInfoSchema.pre('save',function (next) {
-	// 设定当前用户
-	const errInfo = this;
 	// 判断数据是否是新添加的
 	if (this.isNew) {
 		this.meta.createAt = this.meta.updateAt = Date.now();
@@ -45,7 +43,7 @@ errInfoSchema.statics = {
 	},
 }
 
-errInfoSchema.index({date: 1});// 创建索引
+errInfoSchema.indexes([{phone: 1}]);// 创建索引
 
 // 将模式输出
 export default errInfoSchema;
