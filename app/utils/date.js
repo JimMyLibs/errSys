@@ -1,4 +1,4 @@
-Date.prototype.Format = function (fmt) {
+Date.prototype.Format = function (fmt = 'yyyy-MM-dd') {
     var o = {
         "M+": this.getMonth() + 1, //月份 
         "d+": this.getDate(), //日 
@@ -14,9 +14,28 @@ Date.prototype.Format = function (fmt) {
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
-export const today = new Date().Format('yyyyMMdd');
+export const today = new Date().Format('yyyy-MM-dd');
 export const date = (date=new Date())=>{
     const d = new Date(date);
     // return d.getFullYear()+''+(d.getMonth()+1)+''+d.getDate();
-    return d.Format('yyyyMMdd');
+    return d.Format('yyyy-MM-dd');
 } 
+
+// 时间格式化
+export const dateFormat = (date) => {
+    const dateString = new Date(date),
+        month = (dateString.getMonth() + 1) < 10 ? '0' + (dateString.getMonth() + 1) : (dateString.getMonth() + 1),
+        day = dateString.getDate() < 10 ? '0' + dateString.getDate() : dateString.getDate();
+    return dateString.getFullYear() + '-' + month + '-' + day
+}
+// 日期范围
+export const rangeDate = (min, max) => {
+    let days = (new Date(max) - new Date(min)) / 1000 / 60 / 60 / 24,
+    len = Math.floor(days),
+    dates = [];
+
+    for (let i = 0; i <= len; i++) {
+        dates.push(dateFormat(new Date(min).getTime() + 1000 * 60 * 60 * 24 * i));
+    }
+    return dates;
+}
