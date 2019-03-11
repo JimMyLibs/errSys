@@ -5,6 +5,7 @@ const errInfoSchema = new mongoose.Schema({
 	phone: {type: String,default:''},// 手机
 	userId: {type: String,default:''},// userId
 	errMsg: {type: String,default:''},// 错误信息
+	dateTime: {type: Date,default: Date.now()},
 	meta: {
 		createAt: {type: Date,default: Date.now()},
 		updateAt: {type: Date,default: Date.now()}
@@ -14,9 +15,9 @@ const errInfoSchema = new mongoose.Schema({
 errInfoSchema.pre('save',function (next) {
 	// 判断数据是否是新添加的
 	if (this.isNew) {
-		this.meta.createAt = this.meta.updateAt = Date.now();
+		this.dateTime = this.meta.createAt = this.meta.updateAt = Date.now();
 	} else {
-		this.meta.updateAt = Date.now();
+		this.dateTime = this.meta.updateAt = Date.now();
 	}
 	next();
 })

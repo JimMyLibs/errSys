@@ -15,14 +15,17 @@ Date.prototype.Format = function (fmt = 'yyyy-MM-dd') {
     return fmt;
 }
 export const today = new Date().Format('yyyy-MM-dd');
-export const date = (date=new Date())=>{
+export const dateFormat = (date=new Date(),fmt = 'yyyy-MM-dd')=>{
     const d = new Date(date);
-    // return d.getFullYear()+''+(d.getMonth()+1)+''+d.getDate();
-    return d.Format('yyyy-MM-dd');
+    return d.Format(fmt);
+} 
+export const dateTimeFormat = (date=new Date(),fmt = 'yyyy-MM-dd hh:ss')=>{
+    const d = new Date(date);
+    return d.Format(fmt);
 } 
 
 // 时间格式化
-export const dateFormat = (date) => {
+export const dateValFormat = (date) => {
     const dateString = new Date(date),
         month = (dateString.getMonth() + 1) < 10 ? '0' + (dateString.getMonth() + 1) : (dateString.getMonth() + 1),
         day = dateString.getDate() < 10 ? '0' + dateString.getDate() : dateString.getDate();
@@ -35,7 +38,7 @@ export const rangeDate = (min, max) => {
     dates = [];
 
     for (let i = 0; i <= len; i++) {
-        dates.push(dateFormat(new Date(min).getTime() + 1000 * 60 * 60 * 24 * i));
+        dates.push(dateValFormat(new Date(min).getTime() + 1000 * 60 * 60 * 24 * i));
     }
     return dates;
 }

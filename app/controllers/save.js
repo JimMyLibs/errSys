@@ -5,9 +5,18 @@ import { today } from '../utils/date'
 export default (req, res, next) => {
     const { headers, method, path, query, body, body: {
         data, data: {
-            phone, userId, errMsg
+            phone, errMsg
         }
     } } = req;
+    try{
+        if(!phone) throw '手机号不能为空'
+    }catch(err){
+        return res.send({
+            respCode: '10001',
+            message: err,
+            data: {},
+        })
+    }
     const todayModel = mongoose.model('info_'+today, ErrInfoSchema);// 创建当日模型
     try {
         todayModel.create(data, (err, docs) => {
