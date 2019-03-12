@@ -4,9 +4,7 @@ import { today } from '../utils/date'
 
 export default (req, res, next) => {
     const { headers, method, path, query, body, body: {
-        data, data: {
-            phone, errMsg
-        }
+        data, data: { phone }
     } } = req;
     try{
         if(!phone) throw '手机号不能为空'

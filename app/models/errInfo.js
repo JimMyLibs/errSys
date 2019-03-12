@@ -4,8 +4,13 @@ import mongoose from 'mongoose'
 const errInfoSchema = new mongoose.Schema({
 	phone: {type: String,default:''},// 手机
 	userId: {type: String,default:''},// userId
+	projectName: {type: String,default:''},// 项目名称
 	errMsg: {type: String,default:''},// 错误信息
 	dateTime: {type: Date,default: Date.now()},
+	os: {type: String,default:''},// 系统
+	os_version: {type: String,default:''},// 系统版本
+	browser: {type: String,default:''},// 浏览器
+	browser_version: {type: String,default:''},// 浏览器版本
 	meta: {
 		createAt: {type: Date,default: Date.now()},
 		updateAt: {type: Date,default: Date.now()}
@@ -19,6 +24,10 @@ errInfoSchema.pre('save',function (next) {
 	} else {
 		this.dateTime = this.meta.updateAt = Date.now();
 	}
+	next();
+})
+// 每次查询数据之前都会调用这个方法
+errInfoSchema.pre('find',function (next) {	
 	next();
 })
 // 这都是实例方法
