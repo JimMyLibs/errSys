@@ -4,9 +4,7 @@ import { today, dateTimeFormat, rangeDate } from '../utils/date'
 
 export default async (req, res, next) => {
     const { headers, method, path, query, body, body: {
-        data, data: {
-            phone, date, errMsg
-        }
+        phone, date, remark
     } } = req;
     try {
         if (!phone) throw '手机号不能为空'
@@ -18,12 +16,12 @@ export default async (req, res, next) => {
         })
     }
     let args = {};
-    Object.keys(data).map(item => {
-        if (data[item] && item != 'date') {
-            args[item] = data[item];
+    Object.keys(body).map(item => {
+        if (body[item] && item != 'date') {
+            args[item] = body[item];
         }
-        if (item == 'errMsg') {
-            args[item] = { '$regex': new RegExp(errMsg, 'i') }
+        if (item == 'remark') {
+            args[item] = { '$regex': new RegExp(remark, 'i') }
         }
     })
     const findDay = date || today;
@@ -59,7 +57,7 @@ export default async (req, res, next) => {
         try {
             await todayModel.find(args, { _id: 0, __v: 0, meta: 0 }, (err, docs) => {
                 if (err) throw err;
-                console.log('查询成功1', phone);
+                console.log('查询成功1', phone, findDay, args);
                 return res.send({
                     respCode: '10000',
                     message: 'success',
