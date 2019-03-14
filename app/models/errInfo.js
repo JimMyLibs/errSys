@@ -45,9 +45,9 @@ const errInfoSchema = new mongoose.Schema({
 errInfoSchema.pre('save', function (next) {
 	// 判断数据是否是新添加的
 	if (this.isNew) {
-		this.dateTime = this.meta.createAt = this.meta.updateAt = Date.now();
+		this.reachTime = this.meta.createAt = this.meta.updateAt = Date.now();
 	} else {
-		this.dateTime = this.meta.updateAt = Date.now();
+		this.reachTime = this.meta.updateAt = Date.now();
 	}
 	next();
 })
