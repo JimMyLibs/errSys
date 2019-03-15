@@ -4,7 +4,7 @@ import { today, dateTimeFormat, rangeDate } from '../utils/date'
 
 export default async (req, res, next) => {
     const { headers, method, path, query, body, body: {
-        phone, reachTime, remark
+        phone, time, remark
     } } = req;
     try {
         if (!phone) throw '手机号不能为空'
@@ -17,19 +17,19 @@ export default async (req, res, next) => {
     }
     let args = {};
     Object.keys(body).map(item => {
-        if (body[item] && item != 'reachTime') {
+        if (body[item] && item != 'time') {
             args[item] = body[item];
         }
         if (item == 'remark') {
             args[item] = { '$regex': new RegExp(remark, 'i') }
         }
     })
-    const findDay = reachTime || today;
+    const findDay = time || today;
     console.log('查询条件', args, findDay)
     if (findDay.constructor == Array) {// 时间数组：时间范围
         let allLogs = [];
-        console.log('reachTime[0],reachTime[1]', rangeDate(reachTime[0], reachTime[1]))
-        await Promise.all(rangeDate(reachTime[0], reachTime[1]).map(async item => {
+        console.log('time[0],time[1]', rangeDate(time[0], time[1]))
+        await Promise.all(rangeDate(time[0], time[1]).map(async item => {
             const todayModel = mongoose.model('info_' + item, ErrInfoSchema);// 创建当日模型
             try {
                 await todayModel.find(args, { _id: 0, __v: 0, meta: 0 }, (err, docs) => {

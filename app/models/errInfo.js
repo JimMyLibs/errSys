@@ -7,9 +7,9 @@ const errInfoSchema = new mongoose.Schema({
 	reachTime: { type: Date, default: Date.now() },// 送达服务器时间
 
 	// baseData
-	user_id: { type: String, default: '' },
-	device_id: { type: String, default: '' },
-	platform: { type: String, default: '' },
+	user_id: { type: String, default: '' },// 未登录区分用户
+	device_id: { type: String, default: '' },// 已登录区分用户
+	platform: { type: String, default: '' },// 平台: js
 	time: { type: Date, default: '' },// 前端发送时间
 	appkey: { type: String, default: '' },
 	// info
