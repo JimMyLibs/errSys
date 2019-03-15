@@ -10,10 +10,39 @@
 首先，我们为什么要进行异常捕获和上报呢？
 正所谓百密一疏，一个经过了大量测试及联调的项目在有些时候还是会有十分隐蔽的bug存在，这种复杂而又不可预见性的问题唯有通过完善的监控机制才能有效的减少其带来的损失，因此对于直面用户的前端而言，异常捕获与上报是至关重要的。
 ```
+
 ---
 
 ## 异常监控
-1. 前端脚本执行报错
+1. [x] 语法错误
+2. [x] 运行时异常
+3. [x] 资源加载异常
+    ```
+        img
+        script
+        link
+        audio
+        video
+        iframe
+        ...外链资源的DOM元素
+    ```
+4. [x] 异步请求异常
+    ```
+        XMLHttpRequest
+        fetch
+    ```
+5. [x] Promise异常
+6. [ ] CSS中资源异常
+    ```
+        @font-face
+        background-image
+        ...暂时无法捕获
+
+    ```
+
+
+
+
 
 ---
 
@@ -27,22 +56,19 @@
 
 ### 异常捕获方法
 1. try catch
-> 通常，为了判断一段代码中是否存在异常，我们会这一写：
-```
-try {
-    var a = 1;
-    var b = a + c;
-} catch (e) {
-    // 捕获处理
-    console.log(e); // ReferenceError: c is not defined
-}
-```
+> ES提供基本的错误捕获语法
+
+- 只能捕获同步代码的异常
+- ~~回调~~
+- setTimeout
+- promise
+
 > 使用try catch能够很好的捕获异常并对应进行相应处理，不至于让页面挂掉，但是其存在一些弊端，比如需要在捕获异常的代码上进行包裹，会导致页面臃肿不堪，不适用于整个项目的异常捕获。
 
 
 
 2. window.onerror
-> 相比try catch来说window.onerror提供了全局监听异常的功能：
+> 相比try catch来说window.onerror提供了全局监听异常的功能，当JavaScript运行时错误（包括语法错误）发生时，window会触发一个ErrorEvent接口的事件，并执行window.onerror();
 ```
 window.onerror = function(errorMessage, scriptURI, lineNo, columnNo, error) {
     console.log('errorMessage: ' + errorMessage); // 异常信息
@@ -56,6 +82,12 @@ console.log(a);
 ![onerror截图](https://segmentfault.com/img/remote/1460000013983115?w=700&h=244)
 > window.onerror即提供了我们错误的信息，还提供了错误行列号，可以精准的进行定位，如此似乎正是我们想要的，但是接下来便是填坑过程。
 
+> 但这里有个信息要注意，语法错误会导致出现语法错误的那个脚本块执行失败，所以语法错误会导致当前代码块运行终止，从而导致整个程序运行中断，如果语法错误这个发生在我们的错误监控语句块中，那么我们就什么也监控不到了。
+
+3. window.addEventListener('error', cb, true)
+4. window.addEventListener("unhandledrejection", cb)
+5. Promise.then().catch(cb)
+6. 封装XMLHttpRequest&fetch | 覆写请求接口对象
 
 ---
 
@@ -198,7 +230,9 @@ event_id: 筛选事件
 备注: 自定义备注信息
 
 ```
+[视频体验](https://static.fundebug.cn/product.mp4)
 
+[网页demo](https://www.fundebug.com/dashboard/5c879a65abc2a30114e0ca81/errors/inbox?filters=%7B"startTime":1544854560000,"endTime":1552630560000%7D&sortby=%7B"sortfield":"lastSeen","sortvalue":"descending"%7D&search=&eventId=&errorStatus=&token=)
 
 
 

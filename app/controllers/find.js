@@ -6,15 +6,6 @@ export default async (req, res, next) => {
     const { headers, method, path, query, body, body: {
         phone, time, remark
     } } = req;
-    try {
-        if (!phone) throw '手机号不能为空'
-    } catch (err) {
-        return res.send({
-            respCode: '10001',
-            message: err,
-            data: {},
-        })
-    }
     let args = {};
     Object.keys(body).map(item => {
         if (body[item] && item != 'time') {

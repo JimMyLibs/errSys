@@ -3,8 +3,7 @@ import mongoose from 'mongoose'
 // 创建模式对象
 const errInfoSchema = new mongoose.Schema({
 	phone: { type: String, default: '' },// 手机
-	remark: { type: String, default: '' },// 错误信息
-	reachTime: { type: Date, default: Date.now() },// 送达服务器时间
+	remark: { type: String, default: '' },// 自定义备注
 
 	// baseData
 	user_id: { type: String, default: '' },// 未登录区分用户
@@ -16,9 +15,9 @@ const errInfoSchema = new mongoose.Schema({
 	type: { type: String, default: '' },
 	event_id: { type: String, default: '' },// event_id为事件id，为事件采集需求表中协定的名称
 	event_entry: { type: String, default: '' },// event_entry （默认为2）触发时机，1.页面加载；2.按钮点击；10.按钮点击；13、H5渠道引流落地上传cookie_id,UA,UTM，
-	session_id: { type: String, default: '' },
-	app_version: { type: String, default: '' },
-	channel: { type: String, default: '' },
+	session_id: { type: String, default: '' },// 会话id
+	app_version: { type: String, default: '' },// 应用版本
+	channel: { type: String, default: '' },// 渠道H5
 	project_id: { type: String, default: '' },// 项目名称
 	os: { type: String, default: '' },// 系统
 	os_version: { type: String, default: '' },// 系统版本
@@ -31,11 +30,6 @@ const errInfoSchema = new mongoose.Schema({
 		type: [{ n: String, v: String, _id: false }],
 		default: [{ n: '', v: '' }]
 	},
-
-	times: {
-		type: [{ name: String, start: Date, end: Date, _id: false }],
-		default: [{ name: '', start: Date.now(), end: Date.now() }]
-	},
 	meta: {
 		createAt: { type: Date, default: Date.now() },
 		updateAt: { type: Date, default: Date.now() }
@@ -45,9 +39,9 @@ const errInfoSchema = new mongoose.Schema({
 errInfoSchema.pre('save', function (next) {
 	// 判断数据是否是新添加的
 	if (this.isNew) {
-		this.reachTime = this.meta.createAt = this.meta.updateAt = Date.now();
+		this.meta.createAt = this.meta.updateAt = Date.now();
 	} else {
-		this.reachTime = this.meta.updateAt = Date.now();
+		this.meta.updateAt = Date.now();
 	}
 	next();
 })
